@@ -6,17 +6,16 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in);
 
-    // 2D array to store stock and product names
+
     static String[][] stock;
 
-    // Array to keep track of history actions
+
     static String[] history = new String[100];
     static int historyCount = 0;
 
     public static void main(String[] args) {
         int option;
 
-        // Main menu loop
         do {
             System.out.println("\n--- Product Stock Management ---");
             System.out.println("1. Set Up Stock with Catalogue");
@@ -28,9 +27,9 @@ public class Main {
             System.out.println("7. Exit");
             System.out.print("Choose option: ");
             option = scanner.nextInt();
-            scanner.nextLine(); // Clear newline from buffer
+            scanner.nextLine();
 
-            // Menu options
+
             if (option == 1) {
                 setUpStock();
             } else if (option == 2) {
@@ -49,7 +48,7 @@ public class Main {
                 System.out.println("Invalid option.");
             }
 
-        } while (option != 7); // Repeat until user chooses Exit
+        } while (option != 7);
     }
 
     // 1. Set up stock and catalogue
@@ -71,7 +70,7 @@ public class Main {
         }
 
         System.out.println("----- SET UP STOCK SUCCEEDED -----");
-        viewStock(); // Show stock after setup
+        viewStock();
     }
 
     // 2. View current stock and products
@@ -86,7 +85,7 @@ public class Main {
             for (int j = 0; j < stock[i].length; j++) {
                 System.out.print("[ " + (j + 1) + " - " + stock[i][j] + " ] ");
             }
-            System.out.println(); // Newline after each stock row
+            System.out.println();
         }
     }
 
