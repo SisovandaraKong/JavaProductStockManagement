@@ -6,10 +6,7 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in);
 
-
     static String[][] stock;
-
-
     static String[] history = new String[100];
     static int historyCount = 0;
 
@@ -29,41 +26,30 @@ public class Main {
             option = scanner.nextInt();
             scanner.nextLine();
 
-
-            if (option == 1) {
-                setUpStock();
-            } else if (option == 2) {
-                viewStock();
-            } else if (option == 3) {
-                insertProduct();
-            } else if (option == 4) {
-                updateProduct();
-            } else if (option == 5) {
-                deleteProduct();
-            } else if (option == 6) {
-                viewHistory();
-            } else if (option == 7) {
-                System.out.println("Exiting program...");
-            } else {
-                System.out.println("Invalid option.");
+            switch (option) {
+                case 1 -> setUpStock();
+                case 2 -> viewStock();
+                case 3 -> insertProduct();
+                case 4 -> updateProduct();
+                case 5 -> deleteProduct();
+                case 6 -> viewHistory();
+                case 7 -> System.out.println("Exiting program...");
+                default -> System.out.println("Invalid option.");
             }
 
         } while (option != 7);
     }
 
-    // 1. Set up stock and catalogue
     static void setUpStock() {
         System.out.print("Enter number of stock: ");
         int stockCount = scanner.nextInt();
-        stock = new String[stockCount][]; // Initialize rows
+        stock = new String[stockCount][];
 
-        // Ask for number of catalogue items per stock
         for (int i = 0; i < stockCount; i++) {
             System.out.print("Enter number of catalogues for stock [" + (i + 1) + "]: ");
             int catalogueCount = scanner.nextInt();
-            stock[i] = new String[catalogueCount]; // Initialize columns
+            stock[i] = new String[catalogueCount];
 
-            // Fill each catalogue slot with "EMPTY"
             for (int j = 0; j < catalogueCount; j++) {
                 stock[i][j] = "EMPTY";
             }
@@ -73,7 +59,6 @@ public class Main {
         viewStock();
     }
 
-    // 2. View current stock and products
     static void viewStock() {
         if (stock == null) {
             System.out.println("Stock not set up yet.");
@@ -89,7 +74,7 @@ public class Main {
         }
     }
 
-    // 3. Insert a product into the first empty catalogue slot
+
     static void insertProduct() {
         if (stock == null) {
             System.out.println("Set up stock first.");
@@ -98,9 +83,8 @@ public class Main {
 
         System.out.print("Enter stock number: ");
         int stockNum = scanner.nextInt();
-        scanner.nextLine(); // clear buffer
+        scanner.nextLine();
 
-        // Validate input
         if (stockNum < 1 || stockNum > stock.length) {
             System.out.println("Invalid stock number.");
             return;
@@ -108,29 +92,34 @@ public class Main {
 
         int stockIndex = stockNum - 1;
 
-        // Loop to find first empty slot
-        for (int i = 0; i < stock[stockIndex].length; i++) {
-            if (stock[stockIndex][i].equals("EMPTY")) {
-                System.out.print("Enter product name to insert: ");
-                String productName = scanner.nextLine();
-                stock[stockIndex][i] = productName;
+        System.out.print("Enter catalogue number: ");
+        int catalogueNum = scanner.nextInt();
+        scanner.nextLine();
 
-                // Record in history
-                if (historyCount < history.length) {
-                    history[historyCount] = "Inserted '" + productName + "' into Stock " + stockNum + " Catalogue " + (i + 1);
-                    historyCount++;
-                }
-
-                System.out.println("Product inserted.");
-                return;
-            }
+        if (catalogueNum < 1 || catalogueNum > stock[stockIndex].length) {
+            System.out.println("Invalid catalogue number.");
+            return;
         }
 
-        // If no empty slot found
-        System.out.println("No empty slot in this stock.");
+        int catalogueIndex = catalogueNum - 1;
+
+        if (!stock[stockIndex][catalogueIndex].equals("EMPTY")) {
+            System.out.println("This catalogue is already occupied with '" + stock[stockIndex][catalogueIndex] + "'.");
+            return;
+        }
+
+        System.out.print("Enter product name to insert: ");
+        String productName = scanner.nextLine();
+        stock[stockIndex][catalogueIndex] = productName;
+
+        if (historyCount < history.length) {
+            history[historyCount] = "Inserted '" + productName + "' into Stock " + stockNum + " Catalogue " + catalogueNum;
+            historyCount++;
+        }
+
+        System.out.println("Product inserted.");
     }
 
-    // 4. Update product name by searching existing name
     static void updateProduct() {
         if (stock == null) {
             System.out.println("Set up stock first.");
@@ -141,7 +130,6 @@ public class Main {
         String oldName = scanner.nextLine();
         boolean found = false;
 
-        // Loop through stock and update name if found
         for (int i = 0; i < stock.length; i++) {
             for (int j = 0; j < stock[i].length; j++) {
                 if (stock[i][j].equalsIgnoreCase(oldName)) {
@@ -149,7 +137,6 @@ public class Main {
                     String newName = scanner.nextLine();
                     stock[i][j] = newName;
 
-                    // Record in history
                     if (historyCount < history.length) {
                         history[historyCount] = "Updated '" + oldName + "' to '" + newName + "' in Stock " + (i + 1) + " Catalogue " + (j + 1);
                         historyCount++;
@@ -166,7 +153,6 @@ public class Main {
         }
     }
 
-    // 5. Delete a product from stock by name
     static void deleteProduct() {
         if (stock == null) {
             System.out.println("Set up stock first.");
@@ -177,13 +163,11 @@ public class Main {
         String name = scanner.nextLine();
         boolean found = false;
 
-        // Search and delete by setting back to "EMPTY"
         for (int i = 0; i < stock.length; i++) {
             for (int j = 0; j < stock[i].length; j++) {
                 if (stock[i][j].equalsIgnoreCase(name)) {
                     stock[i][j] = "EMPTY";
 
-                    // Record in history
                     if (historyCount < history.length) {
                         history[historyCount] = "Deleted '" + name + "' from Stock " + (i + 1) + " Catalogue " + (j + 1);
                         historyCount++;
@@ -200,7 +184,6 @@ public class Main {
         }
     }
 
-    // 6. Display all recorded history
     static void viewHistory() {
         if (historyCount == 0) {
             System.out.println("No history yet.");
